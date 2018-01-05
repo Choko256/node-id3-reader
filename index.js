@@ -15,53 +15,62 @@ const FILE_TOO_SMALL = 'file too small'
  */
 
 module.exports = co.wrap(function*(fd) {
-  if (typeof fd !== 'number') {
-    const filename = path.resolve(fd)
-    fd = yield fs.openAsync(filename, 'r')
-  }
+    if (typeof fd !== 'number') {
+        const filename = path.resolve(fd)
+        fd = yield fs.openAsync(filename, 'r')
+    }
 
-  const stat = yield fs.fstatAsync(fd)
-  if (stat.size < 10) {
-    throw new Error(FILE_TOO_SMALL)
-  }
+    const stat = yield fs.fstatAsync(fd)
+    if (stat.size < 10) {
+        throw new Error(FILE_TOO_SMALL)
+    }
 
-  const buf = Buffer.alloc(4)
-  yield fs.readAsync(
-    fd, buf,
-    0, buf.length, 6 // offset, length, position
-  )
-  const minSize = LocalUtil.getID3TotalSize(buf)
-  if (stat.size <= minSize) {
-    throw new Error(FILE_TOO_SMALL)
-  }
+    const buf = Buffer.alloc(4)
+    yield fs.readAsync(
+        fd,
+        buf,
+        0,
+        buf.length,
+        6 // offset, length, position
+    )
+    const minSize = LocalUtil.getID3TotalSize(buf)
+    if (stat.size <= minSize) {
+        throw new Error(FILE_TOO_SMALL)
+    }
 
-  const stream = fs.createReadStream('', {
-    fd,
-  })
-  const p = parser.create()
-  process.nextTick(() => {
-    stream.pipe(p)
-  })
-
-  const info = yield new Promise(resolve => {
-    p.on('readable', function() {
-      resolve(p.read())
+    const stream = fs.createReadStream('', {
+        fd,
     })
-  })
+    const p = parser.create()
+    process.nextTick(() => {
+        stream.pipe(p)
+    })
 
-  const ret = {}
+    const info = yield new Promise((resolve) => {
+        p.on('readable', function() {
+            resolve(p.read())
+        })
+    })
 
-  let singer = _.find(info.ID3, ['id', 'TPE1'])
-  let title = _.find(info.ID3, ['id', 'TIT2'])
-  let album = _.find(info.ID3, ['id', 'TALB'])
-  singer = singer.content
-  title = title.content
-  album = album.content
+    const ret = {}
 
-  return {
-    singer,
-    title,
-    album,
-    raw: info,
-  }
+    let singer = _.find(info.ID3, ['id', 'TPE1'])
+    let title = _.find(info.ID3, ['id', 'TIT2'])
+    let album = _.find(info.ID3, ['id', 'TALB'])
+    let genre = _.find(info.ID3, ['id', 'TCON'])
+    let year = _.find(info.ID3, ['id', 'TYER'])
+    singer = singer.content
+    title = title.content
+    album = album.content
+    genre = genre.content
+    year = year.content
+
+    return {
+        singer,
+        title,
+        album,
+        genre,
+        year,
+        raw : info,
+    }
 })
