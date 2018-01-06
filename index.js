@@ -59,6 +59,8 @@ module.exports = async (fd) => {
     genre = genre ? genre.content : null
     year = year ? year.content : null
 
+    stream.close()
+
     return {
         singer,
         title,
