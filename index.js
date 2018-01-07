@@ -31,7 +31,6 @@ module.exports = async (fd) => {
     await readAsync(fd, buf, 0, buf.length, 6)
 
     const minSize = LocalUtil.getID3TotalSize(buf)
-    console.log(`ID3 Size : ${minSize} bytes`)
     if (stat.size <= minSize) {
         throw new Error(FILE_TOO_SMALL)
     }
@@ -43,9 +42,12 @@ module.exports = async (fd) => {
             stream.pipe(p)
         })
 
-        const info = await new Promise((resolve) => {
+        const info = await new Promise((resolve, reject) => {
             p.on('readable', () => {
                 resolve(p.read())
+            })
+            p.on('error', (err) => {
+                reject(err)
             })
         })
 
@@ -60,8 +62,6 @@ module.exports = async (fd) => {
         genre = genre ? genre.content : null
         year = year ? year.content : null
 
-        stream.close()
-
         return {
             singer,
             title,
@@ -72,5 +72,7 @@ module.exports = async (fd) => {
         }
     } catch (err) {
         return null
+    } finally {
+        stream.close()
     }
 }
