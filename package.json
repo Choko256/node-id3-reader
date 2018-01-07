@@ -1,6 +1,6 @@
 {
     "name": "id3-reader",
-    "version": "0.0.8",
+    "version": "0.0.9",
     "description": "mp3 ID3 reader for Node.js",
     "main": "index.js",
     "scripts": {
@@ -12,7 +12,11 @@
         "type": "git",
         "url": "git+ssh://git@github.com/magicdawn/node-id3-reader.git"
     },
-    "keywords": ["mp3", "id3", "id3v2"],
+    "keywords": [
+        "mp3",
+        "id3",
+        "id3v2"
+    ],
     "author": "magicdawn",
     "license": "MIT",
     "bugs": {
@@ -37,5 +41,12 @@
         "lodash": "^4.17.4",
         "stream-browserify": "^2.0.1"
     },
-    "files": ["lib", "index.js", "package.json", "README.md", "CHANGELOG.md", "LICENSE"]
+    "files": [
+        "lib",
+        "index.js",
+        "package.json",
+        "README.md",
+        "CHANGELOG.md",
+        "LICENSE"
+    ]
 }
