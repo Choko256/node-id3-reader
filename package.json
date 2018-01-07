@@ -12,11 +12,7 @@
         "type": "git",
         "url": "git+ssh://git@github.com/magicdawn/node-id3-reader.git"
     },
-    "keywords": [
-        "mp3",
-        "id3",
-        "id3v2"
-    ],
+    "keywords": ["mp3", "id3", "id3v2"],
     "author": "magicdawn",
     "license": "MIT",
     "bugs": {
@@ -37,16 +33,9 @@
     },
     "dependencies": {
         "bluebird": "^3.5.1",
-        "dissolve": "git+ssh://git@github.com/Choko256/dissolve.git#v0.4.1",
+        "dissolve": "https://github.com/Choko256/dissolve.git#v0.4.1",
         "lodash": "^4.17.4",
         "stream-browserify": "^2.0.1"
     },
-    "files": [
-        "lib",
-        "index.js",
-        "package.json",
-        "README.md",
-        "CHANGELOG.md",
-        "LICENSE"
-    ]
+    "files": ["lib", "index.js", "package.json", "README.md", "CHANGELOG.md", "LICENSE"]
 }
